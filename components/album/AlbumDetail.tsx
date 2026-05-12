@@ -35,8 +35,8 @@ export default function AlbumDetails() {
     <div className={"flex flex-col gap-6"}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">{album.name}</CardTitle>
-          <CardDescription>{album.description}</CardDescription>
+          <CardTitle className="text-2xl">{album?.name}</CardTitle>
+          <CardDescription>{album?.description}</CardDescription>
         </CardHeader>
         <CardContent>
           <Card>
