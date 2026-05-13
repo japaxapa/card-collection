@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function AlbumPage() {
+  // TODO put this on a hook
   const [albums, setAlbums] = useState<any[] | null>(null);
   const supabase = createClient();
 
@@ -38,7 +39,7 @@ export default function AlbumPage() {
         </CardHeader>
         <CardContent>
           {albums && albums.length ? (
-            <div className="grid"  >
+            <div className="grid">
               {albums.map((album) => (
                 <Card key={album.id}>
                   <Link href={`/albums/${album.id}`}>

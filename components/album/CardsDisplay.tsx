@@ -12,7 +12,6 @@ export default function CardsDisplay({
   cards: CompleteAlbumCardCategory[];
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  console.log(cards);
 
   return (
     <Collapsible

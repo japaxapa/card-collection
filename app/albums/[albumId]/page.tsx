@@ -4,7 +4,7 @@ import { Suspense } from "react";
 export default function AlbumPage() {
   return (
     <div>
-      <Suspense fallback={<div>Carregando album</div>}>
+      <Suspense fallback={<div>Carregando album...</div>}>
         <AlbumDetails />
       </Suspense>
     </div>
