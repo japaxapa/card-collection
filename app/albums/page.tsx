@@ -38,7 +38,7 @@ export default function AlbumPage() {
         </CardHeader>
         <CardContent>
           {albums && albums.length ? (
-            <div className="grid ">
+            <div className="grid"  >
               {albums.map((album) => (
                 <Card key={album.id}>
                   <Link href={`/albums/${album.id}`}>

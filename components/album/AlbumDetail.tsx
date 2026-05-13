@@ -1,55 +1,39 @@
 "use client";
-import { createClient } from "@/lib/supabase/client";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
+import useAlbum from "@/hooks/useAlbum";
+import CategoryDisplay from "./CategoryDisplay";
 
 export default function AlbumDetails() {
-  const [album, setAlbum] = useState<any | null>(null);
-
-  const { albumId } = useParams();
-  const supabase = createClient();
-
-  const fetchAlbum = async () => {
-    const { data, error } = await supabase
-      .from("albums")
-      .select("*")
-      .eq("id", albumId);
-
-    if (error) console.error("Error while reading album", error.message);
-
-    if (data) setAlbum(data[0]);
-  };
-
-  useEffect(() => {
-    fetchAlbum();
-  }, []);
+  const { album, loading, error } = useAlbum();
 
   return (
     <div className={"flex flex-col gap-6"}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">{album?.name}</CardTitle>
-          <CardDescription>{album?.description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Card>
-            <CardHeader>
-              <CardTitle>Cards</CardTitle>
-              <CardDescription>
-                Album's cards sorted by categories
-              </CardDescription>
-              <CardContent>TODO Image for album</CardContent>
-            </CardHeader>
-          </Card>
-        </CardContent>
-      </Card>
+      <div>
+        <div>
+          <div className="leading-none font-semibold text-2xl">
+            {album?.name}
+          </div>
+          <div className="text-sm text-muted-foreground">
+            {album?.description}
+          </div>
+        </div>
+        <div>
+          <div className="mb-4">
+            <h1 className="leading-none font-semibold">Cards</h1>
+            <p className="text-sm text-muted-foreground">
+              Album's cards sorted by categories
+            </p>
+          </div>
+          <div className="flex gap-4 flex-col">
+            {album?.categories.map((category) => (
+              <CategoryDisplay
+                category={category}
+                key={category.title}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
