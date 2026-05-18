@@ -23,3 +23,7 @@ export type CompleteAlbumCategory =
 export type CompleteAlbumCardCategory = {
   cards: Card;
 };
+
+export type CompleteUserCard = UserCard & {
+  cards: Card;
+};

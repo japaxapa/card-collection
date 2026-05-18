@@ -10,9 +10,15 @@ import {
   InputGroupInput,
 } from "../ui/input-group";
 import { Search } from "lucide-react";
+import useUserCards from "@/hooks/useUserCards";
 
 export default function AlbumDetails() {
   const { album, loading, error } = useAlbum();
+  const {
+    userAlbumCards,
+    loading: cardsLoading,
+    error: cardsError,
+  } = useUserCards();
   const [categories, setCategories] = useState<CompleteAlbumCategory[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
@@ -83,6 +89,7 @@ export default function AlbumDetails() {
               {categories.map((category) => (
                 <CategoryDisplay
                   category={category}
+                  userCards={userAlbumCards}
                   key={category.title}
                 />
               ))}

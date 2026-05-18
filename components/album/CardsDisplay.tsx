@@ -1,40 +1,130 @@
 "use client";
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Collapsible, CollapsibleTrigger } from "../ui/collapsible";
 import { Button } from "../ui/button";
 import { ChevronsUpDown } from "lucide-react";
-import { CompleteAlbumCardCategory } from "@/lib/supabase/types/types";
+import {
+  CompleteAlbumCardCategory,
+  CompleteUserCard,
+} from "@/lib/supabase/types/types";
 import { Badge } from "../ui/badge";
+import { ButtonGroup, ButtonGroupSeparator } from "../ui/button-group";
 
 export default function CardsDisplay({
   cards,
+  userCards,
 }: {
   cards: CompleteAlbumCardCategory[];
+  userCards: CompleteUserCard[] | null;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Collapsible
-      open={isOpen}
-      onOpenChange={setIsOpen}
-    >
-      <div className="flex items-center justify-between gap-4 w-full">
-        <div className="grid grid-cols-4 gap-2">
-          {cards.map((card) => (
-            <Badge key={card.cards.id} className={`w-full bg-green-400`}  >{card.cards.name}</Badge>
-          ))}
+    <Suspense fallback={<div className="h-80 w-full">Carregando...</div>}>
+      <Collapsible
+        open={isOpen}
+        onOpenChange={setIsOpen}
+      >
+        <div className="flex items-center justify-between gap-4 w-full h-fit">
+          <CollapsibleTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8 h-[stretch]"
+            >
+              <ChevronsUpDown />
+              <span className="sr-only">Toggle details</span>
+            </Button>
+          </CollapsibleTrigger>
+
+          {!isOpen && (
+            <div className="grid grid-cols-4 gap-2">
+              {cards.map((card) => {
+                const userCard = userCards?.find(
+                  (c) => c.cards.name == card.cards.name,
+                );
+                return (
+                  <Badge
+                    key={card.cards.id}
+                    className={`w-full ${!userCard ? "" : userCard.quantity === 1 ? "bg-green-300" : userCard.quantity > 1 ? "bg-yellow-300" : ""}`}
+                  >
+                    {card.cards.name}
+                  </Badge>
+                );
+              })}
+            </div>
+          )}
+
+          {isOpen && (
+            <div className="flex flex-col gap-4 w-full">
+              {cards.map((card) => (
+                <div
+                  className="flex justify-between items-center"
+                  key={card.cards.name}
+                >
+                  <div className="flex align-center">{card.cards.name}</div>
+                  <ButtonGroup>
+                    <Button variant="ghost">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={24}
+                        height={24}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="icon icon-tabler icons-tabler-outline icon-tabler-minus"
+                      >
+                        <path
+                          stroke="none"
+                          d="M0 0h24v24H0z"
+                          fill="none"
+                        />
+                        <path d="M5 12l14 0" />
+                      </svg>
+                    </Button>
+                    <ButtonGroupSeparator />
+                    <Button
+                      disabled
+                      variant="outline"
+                    >
+                      0
+                    </Button>
+                    <ButtonGroupSeparator />
+                    <Button
+                      size={"icon"}
+                      variant="ghost"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={24}
+                        height={24}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="icon icon-tabler icons-tabler-outline icon-tabler-plus"
+                      >
+                        <path
+                          stroke="none"
+                          d="M0 0h24v24H0z"
+                          fill="none"
+                        />
+                        <path d="M12 5l0 14" />
+                        <path d="M5 12l14 0" />
+                      </svg>
+                    </Button>
+                  </ButtonGroup>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-        <CollapsibleTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-8"
-          >
-            <ChevronsUpDown />
-            <span className="sr-only">Toggle details</span>
-          </Button>
-        </CollapsibleTrigger>
-      </div>
-    </Collapsible>
+      </Collapsible>
+    </Suspense>
   );
 }
