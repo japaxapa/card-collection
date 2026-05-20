@@ -18,6 +18,9 @@ export default function AlbumDetails() {
     userAlbumCards,
     loading: cardsLoading,
     error: cardsError,
+    createItem,
+    updateItem,
+    deleteItem,
   } = useUserCards();
   const [categories, setCategories] = useState<CompleteAlbumCategory[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -35,8 +38,9 @@ export default function AlbumDetails() {
 
     clearTimeout(timeoutRef.current || undefined);
     timeoutRef.current = setTimeout(() => {
-      const newList = album?.categories.filter((category) =>
-        category.title.toLowerCase().includes(value.toLowerCase()),
+      const newList = album?.categories.filter(
+        (category: CompleteAlbumCategory) =>
+          category.title.toLowerCase().includes(value.toLowerCase()),
       );
 
       setCategories(newList ? newList : []);
@@ -88,9 +92,13 @@ export default function AlbumDetails() {
             <div className="flex gap-4 flex-col">
               {categories.map((category) => (
                 <CategoryDisplay
-                  category={category}
-                  userCards={userAlbumCards}
                   key={category.title}
+                  category={category}
+                  loading={cardsLoading}
+                  userCards={userAlbumCards}
+                  createItem={createItem}
+                  updateItem={updateItem}
+                  deleteItem={deleteItem}
                 />
               ))}
             </div>

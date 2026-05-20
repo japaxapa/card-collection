@@ -1,4 +1,4 @@
-import { Database } from "./datbase";
+import { Database } from "./supabase";
 
 export type Album = Database["public"]["Tables"]["albums"]["Row"];
 
