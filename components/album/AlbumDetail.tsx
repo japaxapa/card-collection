@@ -32,6 +32,7 @@ export default function AlbumDetails() {
     setSearchTerm(value);
 
     if (value === "" && album?.categories) {
+      clearTimeout(timeoutRef.current || undefined);
       setCategories(album.categories);
       return;
     }
