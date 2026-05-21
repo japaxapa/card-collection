@@ -33,7 +33,7 @@ export default function CategoryDisplay({
         <CardTitle>
           <div className="flex justify-between items-center">
             <div>{category.title}</div>
-            <Avatar>
+            <Avatar className="w-10 h-8 rounded-none">
               <AvatarImage
                 src={`/${category.title.toLowerCase()}.png`}
                 alt={`${category.title} flag`}

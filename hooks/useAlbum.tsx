@@ -21,6 +21,7 @@ export default function useAlbum() {
     setLoading(true);
     try {
       if (!albumId || typeof albumId !== "string") return;
+
       const completeAlbumQuery = supabase
         .from("albums")
         .select(

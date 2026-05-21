@@ -27,3 +27,9 @@ export type CompleteAlbumCardCategory = {
 export type CompleteUserCard = UserCard & {
   cards: Card;
 };
+
+export type DuplicateUserCard = {
+  id: string;
+  cards: { name: string };
+  quantity: number;
+};

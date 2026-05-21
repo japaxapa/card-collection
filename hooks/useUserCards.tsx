@@ -63,6 +63,78 @@ export default function useUserCards() {
     }
   };
 
+  const fetchDuplicates = async () => {
+    if (!albumId || typeof albumId !== "string") {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("user_cards")
+        .select(
+          `
+            id,
+            cards(name),
+            quantity
+          `,
+        )
+        .eq("album_id", albumId as string)
+        .gt("quantity", 1)
+        .order("cards(name)", { ascending: true });
+
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error
+          : new Error(
+              "An error occurred while fetching duplicate cards from an album",
+            ),
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchDuplicatesCSV = async () => {
+    if (!albumId || typeof albumId !== "string") {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("user_cards")
+        .select(
+          `
+            cards(name),
+            quantity
+          `,
+        )
+        .eq("album_id", albumId as string)
+        .gt("quantity", 1)
+        .order("cards(name)", { ascending: true })
+        .csv();
+
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error
+          : new Error(
+              "An error occurred while fetching duplicate cards from an album in csv",
+            ),
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const createItem = async (cardId: string) => {
     setLoading(true);
     try {
@@ -144,5 +216,14 @@ export default function useUserCards() {
     getLoggedInUser();
   }, [supabase]);
 
-  return { userAlbumCards, loading, error, createItem, updateItem, deleteItem };
+  return {
+    userAlbumCards,
+    loading,
+    error,
+    createItem,
+    updateItem,
+    deleteItem,
+    fetchDuplicates,
+    fetchDuplicatesCSV,
+  };
 }

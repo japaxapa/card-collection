@@ -1,12 +1,11 @@
-import AlbumDetails from "@/components/album/AlbumDetail";
+import AlbumTabs from "@/components/album/AlbumTabs";
 import { Suspense } from "react";
 
+// TODO check performance
 export default function AlbumPage() {
   return (
-    <div>
-      <Suspense fallback={<div>Carregando album...</div>}>
-        <AlbumDetails />
-      </Suspense>
-    </div>
+    <Suspense fallback={<div>Carregando album...</div>}>
+      <AlbumTabs />
+    </Suspense>
   );
 }
