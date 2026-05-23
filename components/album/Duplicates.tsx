@@ -20,7 +20,7 @@ export default function Duplicates() {
   async function handleDownload() {
     const csv = await fetchDuplicatesCSV();
     if (csv) {
-      const parsedCSV = Papa.parse(csv);
+      const parsedCSV = Papa.parse<Array<any>>(csv);
       const data = [...parsedCSV.data].map((row, index) => {
         if (index == 0) return row;
 

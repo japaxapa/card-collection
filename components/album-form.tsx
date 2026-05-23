@@ -34,7 +34,7 @@ export function AlbumForm({
   }, []);
 
   const fetchAlbum = async () => {
-    if (albumId) {
+    if (albumId && typeof albumId == "string") {
       const { data, error } = await supabase
         .from("albums")
         .select("*")
@@ -44,10 +44,10 @@ export function AlbumForm({
       if (!data) {
         setError("Error fetching album data");
       }
-      
+
       setName(data[0].name);
-      setDescription(data[0].description);
-      setImageUrl(data[0].cover_img_url);
+      setDescription(data[0].description ?? "");
+      setImageUrl(data[0].cover_img_url ?? "");
     }
   };
 
