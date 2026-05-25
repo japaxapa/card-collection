@@ -1,12 +1,13 @@
 import AlbumDetails from "@/components/album/AlbumDetail";
 import Duplicates from "@/components/album/Duplicates";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MissingCards from "./MissingCards";
 
 // TODO check the hydration error
 
 export default function AlbumTabs() {
   return (
-    <Tabs defaultValue="details">
+    <Tabs defaultValue="missing">
       <TabsList
         variant={"line"}
         className="w-full mb-6"
@@ -24,7 +25,8 @@ export default function AlbumTabs() {
         {/* <div></div> */}
       </TabsContent>
       <TabsContent value="missing">
-        <div></div>
+        <MissingCards />
+        {/* <div></div> */}
       </TabsContent>
     </Tabs>
   );

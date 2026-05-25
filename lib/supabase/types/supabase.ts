@@ -170,7 +170,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          album_id: string
+          album_id?: string
           card_id?: string
           id?: string
           obtained_at?: string
@@ -207,7 +207,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_missing_cards: {
+        Args: { p_album_id: string; p_user_id: string }
+        Returns: {
+          album_id: string
+          card_number: number
+          created_at: string
+          id: string
+          name: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "cards"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
     }
     Enums: {
       [_ in never]: never
