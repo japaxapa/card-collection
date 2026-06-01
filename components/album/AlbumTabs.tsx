@@ -7,27 +7,29 @@ import MissingCards from "./MissingCards";
 
 export default function AlbumTabs() {
   return (
-    <Tabs defaultValue="missing">
-      <TabsList
-        variant={"line"}
-        className="w-full mb-6"
+    <div className="min-w-72">
+      <Tabs
+        defaultValue="missing"
+        className="w-full"
       >
-        <TabsTrigger value="details">Details</TabsTrigger>
-        <TabsTrigger value="duplicates">Duplicates</TabsTrigger>
-        <TabsTrigger value="missing">Missing</TabsTrigger>
-      </TabsList>
-      <TabsContent value="details">
-        <AlbumDetails />
-        {/* <div></div> */}
-      </TabsContent>
-      <TabsContent value="duplicates">
-        <Duplicates />
-        {/* <div></div> */}
-      </TabsContent>
-      <TabsContent value="missing">
-        <MissingCards />
-        {/* <div></div> */}
-      </TabsContent>
-    </Tabs>
+        <TabsList
+          variant={"line"}
+          className="w-full mb-6"
+        >
+          <TabsTrigger value="details">Details</TabsTrigger>
+          <TabsTrigger value="duplicates">Duplicates</TabsTrigger>
+          <TabsTrigger value="missing">Missing</TabsTrigger>
+        </TabsList>
+        <TabsContent value="details">
+          <AlbumDetails />
+        </TabsContent>
+        <TabsContent value="duplicates">
+          <Duplicates />
+        </TabsContent>
+        <TabsContent value="missing">
+          <MissingCards />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }

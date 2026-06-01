@@ -32,7 +32,7 @@ export default function useUserCards() {
   }
 
   const fetchUserCards = async () => {
-    if (!albumId || typeof albumId !== "string") {
+    if (!albumId || typeof albumId !== "string" || !user) {
       setLoading(false);
       return;
     }
@@ -46,7 +46,8 @@ export default function useUserCards() {
             cards (*)
           `,
         )
-        .eq("album_id", albumId as string);
+        .eq("album_id", albumId as string)
+        .eq("user_id", user.id);
 
       if (error) throw error;
       setUserAlbumCards(data ?? null);
@@ -64,7 +65,7 @@ export default function useUserCards() {
   };
 
   const fetchDuplicates = async () => {
-    if (!albumId || typeof albumId !== "string") {
+    if (!albumId || typeof albumId !== "string" || !user) {
       setLoading(false);
       return;
     }
@@ -80,6 +81,7 @@ export default function useUserCards() {
           `,
         )
         .eq("album_id", albumId as string)
+        .eq("user_id", user?.id as string)
         .gt("quantity", 1)
         .order("cards(name)", { ascending: true });
 

@@ -32,7 +32,7 @@ export default function AlbumPage() {
 
   return (
     <div className={"flex flex-col gap-6"}>
-      <Card>
+      <Card className="min-h-[85vh]">
         <CardHeader>
           <CardTitle className="text-2xl">Albums</CardTitle>
           <CardDescription>Select your album</CardDescription>
@@ -44,7 +44,7 @@ export default function AlbumPage() {
                 <Card key={album.id}>
                   <Link href={`/albums/${album.id}`}>
                     <CardHeader>
-                      <CardContent>TODO Image for album</CardContent>
+                      {/* <CardContent>TODO Image for album</CardContent> */}
                       <CardTitle>{album.name}</CardTitle>
                       <CardDescription>{album.description}</CardDescription>
                     </CardHeader>

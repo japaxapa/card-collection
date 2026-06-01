@@ -12,14 +12,12 @@ export default function AlbumLayout({
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
           <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
             <div className="flex gap-5 items-center font-semibold">
-              <Link href={"/albums"}>Albums</Link>
+              <Link href={"/"}>Home</Link>
             </div>
             <ThemeSwitcher />
           </div>
         </nav>
-        <div className="flex-1 flex flex-col max-w-5xl p-5">
-          {children}
-        </div>
+        <div className="flex-1 flex flex-col max-w-5xl p-5">{children}</div>
       </div>
     </main>
   );
