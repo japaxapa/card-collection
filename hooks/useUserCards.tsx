@@ -12,12 +12,12 @@ export default function useUserCards() {
   >(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [currUser, setCurrUser] = useState<User>();
 
   const { albumId } = useParams();
   const supabase = useMemo(() => createClient(), []);
 
-  async function getLoggedInUser() {
+  async function getLoggedInUser(): Promise<User> {
     const {
       data: { user },
       error,
@@ -25,18 +25,30 @@ export default function useUserCards() {
 
     if (error) {
       console.error("Error fetching user:", error.message);
-      return null;
+      throw new Error("Failed to fetch user info");
     }
 
-    setUser(user);
+    if (user) {
+      setCurrUser(user);
+      return user;
+    } else {
+      throw new Error("Failed to fetch user info");
+    }
   }
 
   const fetchUserCards = async () => {
-    if (!albumId || typeof albumId !== "string" || !user) {
+    if (!albumId || typeof albumId !== "string") {
       setLoading(false);
       return;
     }
+
     setLoading(true);
+    const currentUser = currUser ?? (await getLoggedInUser());
+    if (!currentUser) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from("user_cards")
@@ -47,7 +59,7 @@ export default function useUserCards() {
           `,
         )
         .eq("album_id", albumId as string)
-        .eq("user_id", user.id);
+        .eq("user_id", currentUser.id);
 
       if (error) throw error;
       setUserAlbumCards(data ?? null);
@@ -65,11 +77,18 @@ export default function useUserCards() {
   };
 
   const fetchDuplicates = async () => {
-    if (!albumId || typeof albumId !== "string" || !user) {
+    if (!albumId || typeof albumId !== "string") {
       setLoading(false);
       return;
     }
+
     setLoading(true);
+    const currentUser = currUser ?? (await getLoggedInUser());
+    if (!currentUser) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from("user_cards")
@@ -81,7 +100,7 @@ export default function useUserCards() {
           `,
         )
         .eq("album_id", albumId as string)
-        .eq("user_id", user?.id as string)
+        .eq("user_id", currentUser.id)
         .gt("quantity", 1)
         .order("cards(name)", { ascending: true });
 
@@ -143,7 +162,11 @@ export default function useUserCards() {
       const { error } = await supabase
         .from("user_cards")
         .insert([
-          { user_id: user?.id, album_id: albumId as string, card_id: cardId },
+          {
+            user_id: currUser?.id,
+            album_id: albumId as string,
+            card_id: cardId,
+          },
         ])
         .select();
 
@@ -211,14 +234,17 @@ export default function useUserCards() {
   };
 
   useEffect(() => {
-    fetchUserCards();
-  }, [albumId, supabase]);
+    if (albumId && currUser) {
+      fetchUserCards();
+    }
+  }, [albumId, currUser, supabase]);
 
   useEffect(() => {
     getLoggedInUser();
   }, [supabase]);
 
   return {
+    user: currUser,
     userAlbumCards,
     loading,
     error,
@@ -227,5 +253,6 @@ export default function useUserCards() {
     deleteItem,
     fetchDuplicates,
     fetchDuplicatesCSV,
+    fetchUserCards,
   };
 }
